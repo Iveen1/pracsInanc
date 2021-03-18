@@ -1,38 +1,45 @@
-//const todolist = ['поесть', 'прийти на пару', 'приехать домой', 'поспать', 'погулять'];
-const addBtn = document.getElementById('btn');
+const btn = document.getElementById('btn')
+const outputElem = document.getElementById('output');
+const input_txt = document.getElementById('input_txt');
+const input_link = document.getElementById('input_link');
 
-function readFromLocalStorage() {
-    return JSON.parse(localStorage.getItem('todolist') || '[]');
-};
+const stage = {
+    list: [['test1', 'https://image.flaticon.com/icons/png/512/123/123164.png'], ['test2', 'https://img.icons8.com/ios/452/face.png']],
+    addItem: function(item){ this.list.push(item); this.render()},
+    removeItem: function(item){ this.list = this.list.filter(elem => elem !== item)},
+    render: function() {
+        if (document.getElementById("item") !== null){
+            document.querySelectorAll('.item').forEach(function(a){
+                a.remove()
+            }); 
+        }
+        this.list.forEach(elem => {
+            const divElem = document.createElement('div');
+            const closeElem = document.createElement('div');
+            const header = document.createElement('h2');
+            
+            let imgElem = document.createElement('img');
+            let value = elem[1];
+            imgElem.src=value;
+            divElem.appendChild(imgElem);
 
-function writeToLocalStorage(array) {
-    localStorage.setItem('todolist', JSON.stringify(array))
-};
+            header.innerText = elem[0];
 
-const input = document.getElementById('input')
-const output = document.getElementById('output')
+            divElem.classList.add('item');
+            divElem.setAttribute('id', 'item');
 
-function render() {
-    output.innerText = '';
-    todolist.forEach((element) => {
-        let liElem = document.createElement('li');
-        liElem.innerText = element;
-        output.appendChild(liElem);
-    })
-};
-
-function addNewTask() {
-    const value = input.value;
-    todolist.push(value);
-    writeToLocalStorage(todolist);
-    render()
-    // let liElem = document.createElement('li');
-    // liElem.innerText = value;
-    // console.log(liElem)
-    // output.appendChild(liElem);
+            closeElem.classList.add('close');
+            closeElem.innerText = "✖";
+            divElem.appendChild(closeElem);
+            divElem.appendChild(header);
+            outputElem.appendChild(divElem);
+            closeElem.addEventListener('click', event=>event.target.parentElement.remove());
+        })
+    }
 }
 
-addBtn.addEventListener('click', addNewTask)
-
-const todolist = readFromLocalStorage();
-render()
+function add(){
+    stage.addItem(([input_txt.value, input_link.value]));
+}
+stage.render()
+btn.addEventListener('click', add);
