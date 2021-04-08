@@ -11,13 +11,14 @@ const stage = {
         if (document.getElementById("item") !== null){
             document.querySelectorAll('.item').forEach(function(a){
                 a.remove()
-            }); 
+            });
         }
         this.list.forEach(elem => {
             const divElem = document.createElement('div');
             const closeElem = document.createElement('div');
             const header = document.createElement('h2');
-            
+            header.setAttribute('id', 'text');
+
             let imgElem = document.createElement('img');
             let value = elem[1];
             imgElem.src=value;
@@ -33,7 +34,11 @@ const stage = {
             divElem.appendChild(closeElem);
             divElem.appendChild(header);
             outputElem.appendChild(divElem);
-            closeElem.addEventListener('click', event=>event.target.parentElement.remove());
+            function remove(event){
+                console.log(event.target.parentElement.childNodes[2].firstChild);
+                event.target.parentElement.remove();
+            }
+            closeElem.addEventListener('click', event=>remove(event));
         })
     }
 }
